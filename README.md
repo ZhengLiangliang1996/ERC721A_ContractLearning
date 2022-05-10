@@ -5,7 +5,7 @@ ERC721A Smart Contract Learning
 git clone git@github.com:ZhengLiangliang1996/ERC721A_ContractLearning.git
 ```
 
-该repo仅用于暂时学习使用，学完即毁。 所以不建立branch, push前pull一下就可以了，目前只看ERC721A的内容。
+该repo仅用于暂时学习使用，学完即毁。 所以不建立branch, push前pull一下就可以了，目前只看[ERC721A](https://github.com/chiru-labs/ERC721A)的内容。
 
 ## 参考资源
 
@@ -18,6 +18,7 @@ git clone git@github.com:ZhengLiangliang1996/ERC721A_ContractLearning.git
 + ERC721A 学习分析
   + [Azuki合约](https://etherscan.io/address/0xed5af388653567af2f388e6224dc7c4b3241c544#code#F4#L5)
     + [通过Azuki分析NFT智能合约源码结构](https://mirror.xyz/fancyalex.eth/3FpkIrY7WptOmnm35sXuVsQvVjmJ_DISX_-oXo-UQHw)
+    + [INTRODUCING ERC721A: AN IMPROVED ERC721 IMPLEMENTATION](https://www.azuki.com/erc721a)
   + [XRC Club合约](https://etherscan.io/address/0x534d37c630b7e4d2a6c1e064f3a2632739e9ee04#code#F13#L1)
     + [从源码解析为何冷兔预售没有出现 Gas War](https://mirror.xyz/davidcai.eth/cO1XOsvg0NvW9um1unIip7okeK6r1LaZ5FzbhTG9CSg)
   + [OpenZeppelin Doc](https://docs.openzeppelin.com)
