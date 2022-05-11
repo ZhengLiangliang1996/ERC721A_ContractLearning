@@ -26,6 +26,11 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
 
   mapping(address => uint256) public allowlist;
 
+
+
+// Constructor is a special function that is only executed upon contract creation. 
+// You can run the contract initialization code.
+
   constructor(
     uint256 maxBatchSize_,
     uint256 collectionSize_,
