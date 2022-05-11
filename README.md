@@ -16,6 +16,7 @@ git clone git@github.com:ZhengLiangliang1996/ERC721A_ContractLearning.git
   * [Writing an NFT Collectible Smart Contract](https://dev.to/rounakbanik/writing-an-nft-collectible-smart-contract-2nh8)
 
 + ERC721A 学习分析
+  + [ERC721A优化解读](https://mirror.xyz/franx.eth/kO0viMZuYfUOOGUfDDSFLrfMxrwwY0g3TW4eHDerqm8)
   + [Azuki合约](https://etherscan.io/address/0xed5af388653567af2f388e6224dc7c4b3241c544#code#F4#L5)
     + [通过Azuki分析NFT智能合约源码结构](https://mirror.xyz/fancyalex.eth/3FpkIrY7WptOmnm35sXuVsQvVjmJ_DISX_-oXo-UQHw)
     + [INTRODUCING ERC721A: AN IMPROVED ERC721 IMPLEMENTATION](https://www.azuki.com/erc721a)
