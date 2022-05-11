@@ -33,6 +33,8 @@ git clone git@github.com:ZhengLiangliang1996/ERC721A_ContractLearning.git
 
 主要对azuki的合约学习分析
 
+![图解Azuki.sol源码结构](./图解Azuki.sol源码结构.png)
+
 #### Broke
 + 主体代码 - 配置
   + Sale
