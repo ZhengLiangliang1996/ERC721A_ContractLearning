@@ -31,7 +31,7 @@ git clone git@github.com:ZhengLiangliang1996/ERC721A_ContractLearning.git
 
 ## 任务分配
 
-主要对azuki的合约学习分析
+主要对azuki的合约学习分析, 其源码结构如下：
 
 ![图解Azuki.sol源码结构](./图解Azuki.sol源码结构.png)
 
