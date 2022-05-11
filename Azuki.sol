@@ -36,7 +36,9 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     uint256 collectionSize_,
     uint256 amountForAuctionAndDev_,
     uint256 amountForDevs_
-  ) ERC721A("Azuki", "AZUKI", maxBatchSize_, collectionSize_) {
+  ) ERC721A("Azuki", "AZUKI", maxBatchSize_, collectionSize_) { 
+      // “Azuki” is the NFT token name
+      // “AZUKI” is the token symbol
     maxPerAddressDuringMint = maxBatchSize_;
     amountForAuctionAndDev = amountForAuctionAndDev_;
     amountForDevs = amountForDevs_;
