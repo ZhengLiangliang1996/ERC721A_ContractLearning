@@ -71,14 +71,21 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     _safeMint(msg.sender, quantity);
     refundIfOver(totalCost);
   }
-
+  // Authentication Part 
   function allowlistMint() external payable callerIsUser {
+    // price of those are eligible to mint 
     uint256 price = uint256(saleConfig.mintlistPrice);
+    // sanity check 
     require(price != 0, "allowlist sale has not begun yet");
+    // allowList map address -> unit256 [number of slots]
     require(allowlist[msg.sender] > 0, "not eligible for allowlist mint");
+    // check maximum supply 
     require(totalSupply() + 1 <= collectionSize, "reached max supply");
+    // decrease one 
     allowlist[msg.sender]--;
+    // safe mint see in ERC721A.sol  
     _safeMint(msg.sender, 1);
+    // refund surplus or ask to have more ETH
     refundIfOver(price);
   }
 
@@ -115,11 +122,11 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
       payable(msg.sender).transfer(msg.value - price);
     }
   }
-
+  // check if the public sale is already happens 
   function isPublicSaleOn(
-    uint256 publicPriceWei,
-    uint256 publicSaleKey,
-    uint256 publicSaleStartTime
+    uint256 publicPriceWei, //
+    uint256 publicSaleKey, // 
+    uint256 publicSaleStartTime // 
   ) public view returns (bool) {
     return
       publicPriceWei != 0 &&
