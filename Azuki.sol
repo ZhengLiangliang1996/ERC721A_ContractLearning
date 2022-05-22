@@ -9,12 +9,19 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./ERC721A.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
+/*
+* Some configuration and modifier
+*/
+
+
 contract Azuki is Ownable, ERC721A, ReentrancyGuard {
+  // Some immutable variable
   uint256 public immutable maxPerAddressDuringMint;
   uint256 public immutable amountForDevs;
   uint256 public immutable amountForAuctionAndDev;
 
   struct SaleConfig {
+    // Configuration of sale
     uint32 auctionSaleStartTime;
     uint32 publicSaleStartTime;
     uint64 mintlistPrice;
@@ -24,6 +31,7 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
 
   SaleConfig public saleConfig;
 
+  // Use mapping(address => uint256) to record the minting balance of every whitelist
   mapping(address => uint256) public allowlist;
 
 
@@ -32,8 +40,8 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
 // You can run the contract initialization code.
 
   constructor(
-    uint256 maxBatchSize_,
-    uint256 collectionSize_,
+    uint256 maxBatchSize_,    //
+    uint256 collectionSize_,  // the max supply of the NFT
     uint256 amountForAuctionAndDev_,
     uint256 amountForDevs_
   ) ERC721A("Azuki", "AZUKI", maxBatchSize_, collectionSize_) { 
@@ -48,6 +56,7 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     );
   }
 
+  // Before calling mint function, check if the caller is the user rather than other contracts.
   modifier callerIsUser() {
     require(tx.origin == msg.sender, "The caller is another contract");
     _;
