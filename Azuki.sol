@@ -13,7 +13,6 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 * Some configuration and modifier
 */
 
-
 contract Azuki is Ownable, ERC721A, ReentrancyGuard {
   // Some immutable variable
   uint256 public immutable maxPerAddressDuringMint;
@@ -35,12 +34,11 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
   mapping(address => uint256) public allowlist;
 
 
-
 // Constructor is a special function that is only executed upon contract creation. 
 // You can run the contract initialization code.
 
   constructor(
-    uint256 maxBatchSize_,    //
+    uint256 maxBatchSize_,    // the explanation at last
     uint256 collectionSize_,  // the max supply of the NFT
     uint256 amountForAuctionAndDev_,
     uint256 amountForDevs_
@@ -55,6 +53,14 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
       "larger collection size needed"
     );
   }
+  
+  /*
+  uint256 maxBatchSize_
+    + defining the maximum NFT a minter can mint in `_safeMint()` in ERC721A
+    + using in `ownershipOf()` to check tokenId of the owner in ERC721A
+    + amount of `devMint()` needed to be a multiply of it
+    + the maximum of NFT every address when auction mint and public sale
+  */
 
   // Before calling mint function, check if the caller is the user rather than other contracts.
   modifier callerIsUser() {
