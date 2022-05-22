@@ -68,25 +68,35 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     _;
   }
 
+  // The mint function used for auction
   function auctionMint(uint256 quantity) external payable callerIsUser {
     uint256 _saleStartTime = uint256(saleConfig.auctionSaleStartTime);
+    // It can mint when the auction begins.
     require(
       _saleStartTime != 0 && block.timestamp >= _saleStartTime,
       "sale has not started yet"
     );
+    // The sum of the minted amount and the quantity of caller inputs needs to be lower than the supply for auction and dev.
     require(
       totalSupply() + quantity <= amountForAuctionAndDev,
       "not enough remaining reserved for auction to support desired mint amount"
     );
+    // The sum of the quantity caller inputs and the balance of NFT in the wallet should be lower than the max balance for every address during mint.
     require(
       numberMinted(msg.sender) + quantity <= maxPerAddressDuringMint,
       "can not mint this many"
     );
+    // Get the minting cost. Whenever it checks the auction price at the moment, 
+    // it sends the set public variable _saleStartTime to the function getAuctionPrice() to confirm whether the auction has started or not.
     uint256 totalCost = getAuctionPrice(_saleStartTime) * quantity;
+    // Use the ERC721A function `_safeMint`
     _safeMint(msg.sender, quantity);
+    // Return the money if it's extra.
     refundIfOver(totalCost);
   }
+  
   // Authentication Part 
+  
   function allowlistMint() external payable callerIsUser {
     // price of those are eligible to mint 
     uint256 price = uint256(saleConfig.mintlistPrice);
@@ -137,6 +147,7 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
       payable(msg.sender).transfer(msg.value - price);
     }
   }
+  
   // check if the public sale is already happens 
   function isPublicSaleOn(
     uint256 publicPriceWei, //
@@ -149,14 +160,22 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
       block.timestamp >= publicSaleStartTime;
   }
 
+/*
+* Auction mint and set up information of sale after the auction
+*/
+
+// Some configuration of the auction
+// Dutch auction starts at some high price and reduces the price with time passing by
+
   uint256 public constant AUCTION_START_PRICE = 1 ether;
   uint256 public constant AUCTION_END_PRICE = 0.15 ether;
   uint256 public constant AUCTION_PRICE_CURVE_LENGTH = 340 minutes;
   uint256 public constant AUCTION_DROP_INTERVAL = 20 minutes;
   uint256 public constant AUCTION_DROP_PER_STEP =
     (AUCTION_START_PRICE - AUCTION_END_PRICE) /
-      (AUCTION_PRICE_CURVE_LENGTH / AUCTION_DROP_INTERVAL);
+      (AUCTION_PRICE_CURVE_LENGTH / AUCTION_DROP_INTERVAL); //the reducing extent of every step
 
+  // Anyone can get the so-far price of the auction
   function getAuctionPrice(uint256 _saleStartTime)
     public
     view
@@ -174,6 +193,7 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     }
   }
 
+  // End the auction and setup some sale information about the price for `allowlist` and the public sale
   function endAuctionAndSetupNonAuctionSaleInfo(
     uint64 mintlistPriceWei,
     uint64 publicPriceWei,
@@ -188,6 +208,7 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     );
   }
 
+  // Decide when the auction starts
   function setAuctionSaleStartTime(uint32 timestamp) external onlyOwner {
     saleConfig.auctionSaleStartTime = timestamp;
   }
@@ -209,16 +230,19 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     }
   }
 
-  // For marketing etc.
+  // Free mint (for marketing etc)
   function devMint(uint256 quantity) external onlyOwner {
+  // The sum of the minted amount and the input needs to be lower than amount for dev.
     require(
       totalSupply() + quantity <= amountForDevs,
       "too many already minted before dev mint"
     );
+    // The input has to be a positive multiply of the `maxBatchSize`
     require(
       quantity % maxBatchSize == 0,
       "can only mint a multiple of the maxBatchSize"
     );
+    // The logic of reducing the minting gas
     uint256 numChunks = quantity / maxBatchSize;
     for (uint256 i = 0; i < numChunks; i++) {
       _safeMint(msg.sender, maxBatchSize);
