@@ -25,6 +25,14 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
  *
  * Does not support burning tokens to address(0).
  */
+ 
+ /*
+ *  核心优化是不再每个tokenId都存储对应的所有者地址，对于mint多个的地址只在第一个tokenId上存储所有者信息，但这样依赖于tokenId的连续性。
+ *  也就是说mint多个时，tokenId是连续的，对于某些项目的tokenId不是连续的来说就不太适用。
+ * 比如meebits的tokenId是随机去除获取的。
+ */
+ 
+ 
 contract ERC721A is
   Context,
   ERC165,
@@ -35,9 +43,10 @@ contract ERC721A is
   using Address for address;
   using Strings for uint256;
 
+  // Compiler will pack this into a single 256bit word.
   struct TokenOwnership {
-    address addr;
-    uint64 startTimestamp;
+    address addr;           // The address of the owner. 所有者地址 160位
+    uint64 startTimestamp;  // Keeps track of the start time of ownership with minimal overhead for tokenomics. 连续片段的第一个token归属给用户的时间戳
   }
 
   struct AddressData {
