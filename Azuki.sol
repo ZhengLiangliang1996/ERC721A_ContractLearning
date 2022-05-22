@@ -86,33 +86,37 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
       numberMinted(msg.sender) + quantity <= maxPerAddressDuringMint,
       "can not mint this many"
     );
+    
     // Get the minting cost. Whenever it checks the auction price at the moment, 
     // it sends the set public variable _saleStartTime to the function getAuctionPrice() to confirm whether the auction has started or not.
+    
     uint256 totalCost = getAuctionPrice(_saleStartTime) * quantity;
-    // Use the ERC721A function `_safeMint`
-    _safeMint(msg.sender, quantity);
-    // Return the money if it's extra.
-    refundIfOver(totalCost);
+    _safeMint(msg.sender, quantity);    // Use the ERC721A function `_safeMint`
+    refundIfOver(totalCost);            // Return the money if it's extra.
   }
   
   // Authentication Part 
   
+  /*
+  * The mint function for the whitelisted
+  */
+  
   function allowlistMint() external payable callerIsUser {
-    // price of those are eligible to mint 
-    uint256 price = uint256(saleConfig.mintlistPrice);
-    // sanity check 
-    require(price != 0, "allowlist sale has not begun yet");
+    uint256 price = uint256(saleConfig.mintlistPrice);                      // price of those are eligible to mint 
+    require(price != 0, "allowlist sale has not begun yet");                // sanity check if the mint for whitelists is begins.
     // allowList map address -> unit256 [number of slots]
     require(allowlist[msg.sender] > 0, "not eligible for allowlist mint");
-    // check maximum supply 
-    require(totalSupply() + 1 <= collectionSize, "reached max supply");
-    // decrease one 
-    allowlist[msg.sender]--;
-    // safe mint see in ERC721A.sol  
-    _safeMint(msg.sender, 1);
-    // refund surplus or ask to have more ETH
-    refundIfOver(price);
+    // `totalSupply()` returns the length of the minted tokens
+    require(totalSupply() + 1 <= collectionSize, "reached max supply");     // check maximum supply 
+    // Before caller call `_safeMint()`, it minus one in the amount of this whitelist can mint
+    allowlist[msg.sender]--;      // decrease one 
+    _safeMint(msg.sender, 1);     // It mints one NFT everytime. // safe mint see in ERC721A.sol  
+    refundIfOver(price);          // refund surplus or ask to have more ETH
   }
+
+/*
+* The mint function for the public sale
+*/
 
   function publicSaleMint(uint256 quantity, uint256 callerPublicSaleKey)
     external
@@ -123,11 +127,12 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     uint256 publicSaleKey = uint256(config.publicSaleKey);
     uint256 publicPrice = uint256(config.publicPrice);
     uint256 publicSaleStartTime = uint256(config.publicSaleStartTime);
+    // Need the correct key for the public sale
     require(
       publicSaleKey == callerPublicSaleKey,
       "called with incorrect public sale key"
     );
-
+    // Check if the public sale starts
     require(
       isPublicSaleOn(publicPrice, publicSaleKey, publicSaleStartTime),
       "public sale has not begun yet"
@@ -141,6 +146,7 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     refundIfOver(publicPrice * quantity);
   }
 
+  // The function of returning the excess money
   function refundIfOver(uint256 price) private {
     require(msg.value >= price, "Need to send more ETH.");
     if (msg.value > price) {
@@ -149,6 +155,7 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
   }
   
   // check if the public sale is already happens 
+  // Anyone can check if the public sale starts
   function isPublicSaleOn(
     uint256 publicPriceWei, //
     uint256 publicSaleKey, // 
@@ -213,10 +220,12 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     saleConfig.auctionSaleStartTime = timestamp;
   }
 
+  // Set the key for the public sale
   function setPublicSaleKey(uint32 key) external onlyOwner {
     saleConfig.publicSaleKey = key;
   }
 
+  // Set the whitelisted address and the amount they can mint
   function seedAllowlist(address[] memory addresses, uint256[] memory numSlots)
     external
     onlyOwner
@@ -230,7 +239,10 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     }
   }
 
-  // Free mint (for marketing etc)
+/*
+* Free mint (for marketing etc)
+*/
+
   function devMint(uint256 quantity) external onlyOwner {
   // The sum of the minted amount and the input needs to be lower than amount for dev.
     require(
@@ -249,7 +261,9 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     }
   }
 
-  // // metadata URI
+/* 
+* metadata URI
+*/ 
   string private _baseTokenURI;
 
   function _baseURI() internal view virtual override returns (string memory) {
@@ -260,19 +274,24 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     _baseTokenURI = baseURI;
   }
 
+  // withdraw the money in NFT contract to the owner address
+  // use `nonReentrant` to protect from the reentrancy attack
   function withdrawMoney() external onlyOwner nonReentrant {
     (bool success, ) = msg.sender.call{value: address(this).balance}("");
     require(success, "Transfer failed.");
   }
 
+  // For the logic of ERC721A, explicitly set `owners` to eliminate loops in future calls of `ownerOf()`.
   function setOwnersExplicit(uint256 quantity) external onlyOwner nonReentrant {
     _setOwnersExplicit(quantity);
   }
 
+  // Check how many NFT this address owns
   function numberMinted(address owner) public view returns (uint256) {
     return _numberMinted(owner);
   }
 
+  // It will return who owns this token and the timestamp he or she owns it.
   function getOwnershipData(uint256 tokenId)
     external
     view
