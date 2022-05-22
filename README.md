@@ -24,6 +24,7 @@ git clone git@github.com:ZhengLiangliang1996/ERC721A_ContractLearning.git
   + [XRC Club合约](https://etherscan.io/address/0x534d37c630b7e4d2a6c1e064f3a2632739e9ee04#code#F13#L1)
     + [从源码解析为何冷兔预售没有出现 Gas War](https://mirror.xyz/davidcai.eth/cO1XOsvg0NvW9um1unIip7okeK6r1LaZ5FzbhTG9CSg)
   + [OpenZeppelin Doc](https://docs.openzeppelin.com)
+  + [BEANZ Official](https://etherscan.io/address/0x306b1ea3ecdf94ab739f1910bbda052ed4a9f949#code)
 
 + 其余项目阅读
   + [Pepsi NFT Smart Contract](https://betterprogramming.pub/nft-beginner-tutorial-pepsi-nft-smart-contract-explained-962721b7361a)
