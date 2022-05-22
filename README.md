@@ -21,6 +21,7 @@ git clone git@github.com:ZhengLiangliang1996/ERC721A_ContractLearning.git
     + [通过Azuki分析NFT智能合约源码结构](https://mirror.xyz/fancyalex.eth/3FpkIrY7WptOmnm35sXuVsQvVjmJ_DISX_-oXo-UQHw)
     + [INTRODUCING ERC721A: AN IMPROVED ERC721 IMPLEMENTATION](https://www.azuki.com/erc721a)
     + [Study NFT minting code — Azuki, the ancestor of ERC721A](https://medium.com/coinmonks/study-nft-minting-code-azuki-the-ancestor-of-erc721a-bf94ce211039)
+    + [Azuki开辟NFT发售“新玩法”](https://mirror.xyz/0x0Ec8947fe8685fE1e368e3f729843F41De4A18E6/WreRLBDM6eI9Olv3tjXYJo_HlP65ktcoszzXmmMiORk)
   + [XRC Club合约](https://etherscan.io/address/0x534d37c630b7e4d2a6c1e064f3a2632739e9ee04#code#F13#L1)
     + [从源码解析为何冷兔预售没有出现 Gas War](https://mirror.xyz/davidcai.eth/cO1XOsvg0NvW9um1unIip7okeK6r1LaZ5FzbhTG9CSg)
   + [OpenZeppelin Doc](https://docs.openzeppelin.com)
