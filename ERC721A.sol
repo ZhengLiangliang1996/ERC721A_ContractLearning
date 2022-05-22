@@ -74,6 +74,8 @@ contract ERC721A is
    * `maxBatchSize` refers to how much a minter can mint at a time.
    * `collectionSize_` refers to how many tokens are in the collection.
    */
+   
+  // constructor
   constructor(
     string memory name_,
     string memory symbol_,
@@ -169,6 +171,8 @@ contract ERC721A is
     return uint256(_addressData[owner].numberMinted);
   }
 
+
+  // ownershipOf() to check the owner of the NFT
   function ownershipOf(uint256 tokenId)
     internal
     view
@@ -354,6 +358,8 @@ contract ERC721A is
    *
    * Emits a {Transfer} event.
    */
+   
+  // _safeMint() to mint NFT
   function _safeMint(
     address to,
     uint256 quantity,
