@@ -4,8 +4,8 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";            // 基础权限管理
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";  // 防止重复/嵌套使用
 import "./ERC721A.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
