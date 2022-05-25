@@ -241,17 +241,20 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
 * Free mint (for marketing etc)
 */
 
-  function devMint(uint256 quantity) external onlyOwner {
-  // The sum of the minted amount and the input needs to be lower than amount for dev.
+  function devMint(uint256 quantity) external onlyOwner {                 // 3 Mint
+  
+    // The sum of the minted amount and the input needs to be lower than amount for dev.
     require(
       totalSupply() + quantity <= amountForDevs,
       "too many already minted before dev mint"
     );
+    
     // The input has to be a positive multiply of the `maxBatchSize`
     require(
       quantity % maxBatchSize == 0,
       "can only mint a multiple of the maxBatchSize"
     );
+    
     // The logic of reducing the minting gas
     uint256 numChunks = quantity / maxBatchSize;
     for (uint256 i = 0; i < numChunks; i++) {
