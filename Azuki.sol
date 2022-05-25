@@ -15,7 +15,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract Azuki is Ownable, ERC721A, ReentrancyGuard {
   // Some immutable variable
-  uint256 public immutable maxPerAddressDuringMint;
+  uint256 public immutable maxPerAddressDuringMint; // 单个地址可mint次数
   uint256 public immutable amountForDevs;
   uint256 public immutable amountForAuctionAndDev;
 
@@ -25,7 +25,7 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     uint32 publicSaleStartTime;
     uint64 mintlistPrice;
     uint64 publicPrice;
-    uint32 publicSaleKey;
+    uint32 publicSaleKey; // 执行发售合约的owner address
   }
 
   SaleConfig public saleConfig;
@@ -69,7 +69,7 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
   }
 
   // The mint function used for auction
-  function auctionMint(uint256 quantity) external payable callerIsUser {
+  function auctionMint(uint256 quantity) external payable callerIsUser {   // 3 Mint
     uint256 _saleStartTime = uint256(saleConfig.auctionSaleStartTime);
     // It can mint when the auction begins.
     require(
@@ -95,13 +95,11 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     refundIfOver(totalCost);            // Return the money if it's extra.
   }
   
-  // Authentication Part 
-  
   /*
   * The mint function for the whitelisted
   */
   
-  function allowlistMint() external payable callerIsUser {
+  function allowlistMint() external payable callerIsUser {                  // 2 权限判断 Authentication Part 
     uint256 price = uint256(saleConfig.mintlistPrice);                      // price of those are eligible to mint 
     require(price != 0, "allowlist sale has not begun yet");                // sanity check if the mint for whitelists is begins.
     // allowList map address -> unit256 [number of slots]
@@ -122,7 +120,7 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
     external
     payable
     callerIsUser
-  {
+  {                                                                          // 3 Mint
     SaleConfig memory config = saleConfig;
     uint256 publicSaleKey = uint256(config.publicSaleKey);
     uint256 publicPrice = uint256(config.publicPrice);
@@ -147,7 +145,7 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
   }
 
   // The function of returning the excess money
-  function refundIfOver(uint256 price) private {
+  function refundIfOver(uint256 price) private {                             // 3 Mint
     require(msg.value >= price, "Need to send more ETH.");
     if (msg.value > price) {
       payable(msg.sender).transfer(msg.value - price);
@@ -156,7 +154,7 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
   
   // check if the public sale is already happens 
   // Anyone can check if the public sale starts
-  function isPublicSaleOn(
+  function isPublicSaleOn(                                                   // 2 权限判断 Authentication Part 
     uint256 publicPriceWei, //
     uint256 publicSaleKey, // 
     uint256 publicSaleStartTime // 
@@ -216,12 +214,12 @@ contract Azuki is Ownable, ERC721A, ReentrancyGuard {
   }
 
   // Decide when the auction starts
-  function setAuctionSaleStartTime(uint32 timestamp) external onlyOwner {
+  function setAuctionSaleStartTime(uint32 timestamp) external onlyOwner { // 拍卖开始时间
     saleConfig.auctionSaleStartTime = timestamp;
   }
 
   // Set the key for the public sale
-  function setPublicSaleKey(uint32 key) external onlyOwner {
+  function setPublicSaleKey(uint32 key) external onlyOwner {              // 执行公开销售的owner address
     saleConfig.publicSaleKey = key;
   }
 
